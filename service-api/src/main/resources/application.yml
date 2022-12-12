@@ -1,0 +1,13 @@
+# 왜 db 설정 yml이 model 모듈에 들어갈 필요가 없고, api 모듈에 들어가야 하는 건지?
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/shoppingmall
+    username: root
+    password: '00000000'
+
+server:
+  port: 8001
+
+
+

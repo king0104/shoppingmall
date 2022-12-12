@@ -1,0 +1,5 @@
+rootProject.name = 'shoppingmall'
+include 'admin'
+include 'service-api'
+include 'model'
+

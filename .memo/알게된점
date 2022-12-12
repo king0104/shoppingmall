@@ -1,0 +1,15 @@
+1. application.yml에서 비밀번호는 string으로 줘야함
+
+
+2. core에는 application.yml 필요 없다.
+core는 라이브러리 역할을 하는 것이고, 이 말은 즉슨
+실제로 SpringbootApplication이 있는 것이 아라는 것이다.
+
+그래서, yml 파일은 필요없게 된다.
+
+결론 : SpringbootApplication이 존재하는 모듈마다(모듈에만), yml 파일 만들어야 한다
+
+
+3. gradle로 프로젝트 생성 방법
+-> 그냥 new module에서 gradle 선택
+
