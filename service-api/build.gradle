@@ -1,0 +1,13 @@
+// spring data jpa, lombok, mysql connector, test
+dependencies {
+    dependencies {
+        implementation project(':model')
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+        implementation 'org.springframework.boot:spring-boot-starter-security'
+        implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    }
+}
+
+bootJar { enabled = true } // main이 필요한 모듈에 대해서만 bootJar 사용
+jar { enabled = false }

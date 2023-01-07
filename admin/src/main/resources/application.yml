@@ -1,2 +1,24 @@
 server:
   port: 8000
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/shoppingmall
+    username: root
+    password: '00000000'
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+
+#logging:
+#  level:
+#    org:
+#      springframework: debug
+#      hibernate:
+#        type:
+#          descriptor:
+#            sql: trace

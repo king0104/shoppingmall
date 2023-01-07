@@ -1,0 +1,28 @@
+1. 이거 더 간단하게 하는 법 생각해봐도 모르겠음.. null이랑 Y,N을 어떻게 동시에 처리?
+- 3중연산자?
+
+@Override
+    public List<StoreRequest> findAll(Integer offset, Integer limit, LocalDateTime firstTime, LocalDateTime lastTime, String isDeleted) {
+        // -- querydsl
+        // --
+        return from(storeRegistration)
+                .where(
+                        storeRegistration.createdAt.between(firstTime, lastTime)
+                            .and(isDeletedEq(isDeleted))
+                )
+                .offset(offset).limit(limit)
+                .fetch();
+    }
+
+    private BooleanExpression isDeletedEq(String isDeleted) {
+        // ? 더 좋은 방법이 있나..?
+        if (StringUtils.isNotBlank(isDeleted)) { // isNotBlank, isBlank
+            if (isDeleted.equals(DELETE)) {
+                return storeRegistration.isDeleted.eq(DELETE);
+            }
+            return storeRegistration.isDeleted.eq(NOT_DELETE);
+        }
+        return null;
+    }
+
+2. errorcode가 의미하는 바가 내가 만든 코드인지, 아니면 상태코드인지?

@@ -6,9 +6,9 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableJpaAuditing
-@SpringBootApplication
-public class ServiceApiApplication {
+@SpringBootApplication(exclude = SecurityAutoConfiguration.class)
+public class AdminApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ServiceApiApplication.class, args);
+        SpringApplication.run(AdminApplication.class, args);
     }
 }

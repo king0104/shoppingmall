@@ -1,0 +1,10 @@
+1. validation 적용
+- storerequest register에 적용됨
+- 나머지 validation 적용
+
+2. spring security 적용
+- 로그인 로직 작성
+- 로그인 후, 요청을 보내면, sellerNo를 알아서 넣어주는 로직 작성
+
+3. api 2개 스프링시큐리티 적용하기
+필터 확인3

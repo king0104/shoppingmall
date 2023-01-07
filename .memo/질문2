@@ -1,0 +1,14 @@
+1. null값을 받아서 null이면 어떤 로직을 수행한다 -> 와 같은 로직을 짜나요?
+- storerequest 조회 메서드 (조회 조건에 isDeleted 존재)
+- isDeleted에 Y, N, null 이 들어올 수 있는 상황
+- null이 들어오면, isDeleted 조건을 버리는 로직
+-> validation check에 Y,N,null 3개의 값만 허용하고 싶은 상황
+-> 이 경우 null인지 아닌지 확인은, StringUtils.isEmpty() (null 또는 빈값이면 true리턴) 사용하면 되는건가요?
+
+
+2. exception handler에서 여러 에러를 한번에 다 넘겨야 하는지, 아니면 하나씩만 잡아서 넘겨도 되는지
+
+
+3. requeestParam으로 들어오는 값들에 대한 validation
+- 2개에 대해 한번에 validation 하고 싶으면 어떻게..?
+- controller에서 그냥 해버리면, validation에서 나오는 예외가 아니라서..

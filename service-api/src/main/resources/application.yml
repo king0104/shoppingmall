@@ -6,8 +6,15 @@ spring:
     username: root
     password: '00000000'
 
+  main:
+    allow-bean-definition-overriding: true
+
 server:
   port: 8001
 
 
 
+#logging:
+#  level:
+#    org:
+#      springframework: debug

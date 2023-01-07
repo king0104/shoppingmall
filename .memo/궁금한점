@@ -1,0 +1,48 @@
+1. validation 안하면 무슨 에러가 발생함?
+- com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: Data too long for column 'name' at row 1
+- 사실 쓰는 이유는, 내가 의도한 데이터만 받고 싶기 때문이다.
+
+- 필드에 들어올 수는 있지만 비즈니스 상 들어오면 안되는 값을 거르기 위해 validation 하는 것!
+- 올바르지 않은 데이터가 들어왔을때, 내가 원하는 메세지로 주고 싶어서
+
+
+2. localtime 검증은 어떻게 진행?
+- open time < close time 필요
+
+- 00:00:00 으로 잘 들어왔는지 확인
+    - 이거 @pattern으로 하려 했는데 string을 검증하는 어노테이션이라 불가능
+    - 그럼 커스텀 validator를 사용해야하나????
+
+- localtime 안쓰고 string으로 받나..?
+
+
+- 그냥 custom valid annotation 만들자...(validator는 객체 검증임)
+
+
+[spring security]
+- 로그인하는 user 객체랑 seller 객체랑 같은 건가 다른 건가?
+    - 일단 다른 것 같음..
+    
+- 로그인 하고나서 authentication 객체 리턴 받으면, 그걸로 뭘 할 수 있는거지?
+- 로그인 한 후에 api 날릴 때 자신의 sellerNo를 넣어서 날리는 방법은?
+
+- 로그인 된 이후에 뭘 어떻게 하는거임?
+
+
+- 세션 방식임.
+    - 웹 브라우저에서 보이는 세션의 값은 세션ID라고 불리고 클라이언트마다 다릅니다.
+    - 쿠키와 달리 처음에만 (서버->클라이언트)로 전달되고 이후에는 (클라이언트->서버)로만 전달
+    - 처음에 클라이언트로 전달되는 세션의 값은 위같이 식별자에 불과하며
+      이후로 서버에 전달되는 세션도 식별자 파일을 탐색하는 용도에 불과합니다.
+    - 해킹의 위험을 줄일 수 있는 (인증, 개인화, 방문자의 상태 체크) 방법
+- 세션: 웹 서버에만 정보(value)를 남기면서 안전하게 (인증, 개인화, 방문자의 상태 체크)를 하는 방법
+
+(참고블로그)
+https://data-make.tistory.com/660 : 타임리프로 화면 구성
+
+(궁금증)
+- 그럼 서버에 저장된 세션 정보 내부에 클라이언트의 sellerNo 이런게 있는건가?
+- 아니면 내가 가지고 있는 세션키로 sellerNo를 얻어오는건가?
+-> @AuthenticationPrincipal 이용해서 꺼내기
+
+- customFilter에서 설정 확인하기

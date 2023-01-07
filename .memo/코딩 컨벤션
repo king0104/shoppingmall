@@ -1,0 +1,128 @@
+<클래스 이름, 필드 이름 관련>
+1. dto 접미사 붙이기
+- entity랑 구별하기 위해서
+
+2. id값 : entityNo
+
+3. Jpa Auditing 사용 x
+- BaseEntity 안쓰고, createdAt, updatedAt, isDeleted 각각 사용하기
+- 사족 붙는 느낌이라
+
+4. 더티 체킹 사용 x
+- 영속 상태인지 아닌지 잘 안보여서...
+- save()로 통일하는게 눈에도 잘보이고 좋음
+- 어차피 지연로딩은 똑같이 적용됨
+
+5. response 클래스 하나 만들어서, 통일하기
+- 결과값 형태 맞추기 (response)
+- id를 리턴하지 않고 형태를 맞춘다
+    - 예시) class Response <T> {
+        boolean success;
+        T data;
+        int errorCode;
+        }
+
+    - data에 리턴하고자 하는 클래스 넣으면 된다!
+
+    - status code보다 success 넣어줌
+    - 200,201 400 401 404 300 301 redirect 500
+    - 이걸 알아야 restful api를 짤 수 있다
+    - 이건 기초적인 질문이니까 거의 외울만큼
+
+6. @Builder는 클래스에 붙이기 + @AllArgs, @NoArgs
+
+7. entity에도 setter 추가하기 (간단한 작업은 setter사용)
+- 간단한 작업은 setter로 하는 것이 낫다.
+- 값 하나 바꾸는데에도 메서드 만들면, 계속 메서드가 거추장스럽게 불어나는 느낌이라서..
+
+
+< 메서드 작성 시>
+1. 화이트리스트 vs 블랙리스트
+- 더 적은 케이스로 하기
+
+2. method 네이밍 규칙
+- check~~  : IllegalStateException 던져야하는 예외 체크시, check~~ 으로 메서드명 정하기
+- is ~~~ validated : controller에서 파라미터 유효성 검사 메서드 작성할 때 사용
+- get : 조회
+- register : 등록
+
+[controller]
+- s붙이기
+
+[service]
+- List 붙이기
+
+
+<uri>
+1. 맨 앞부분에 api 지우기 / 모듈 이름 지우기
+- 내부 요청이므로, 굳이 api를 쓸 필요 있나
+- restful한 uri 짜야하므로, 모듈 이름도 넣을 필요가 없다
+- url restful하게 짜기
+    - '자원의 이름'으로만 표시
+    - /store/register-request or request + @PostMapping(이게 등록한다는 뜻이므로)
+
+2. restful url
+- 수정 api의 uri
+    - 예시 : /store-requests/{store-request-no}/approve
+    - 뜻 : 여러 자원들 중에 / 하나의 자원을 고른다
+    - 핵심 : 하나를 고른다는 것 자체가 여러개의 자원들 중에서 하나를 특정하는 것이므로, uri 적을 때 /여러객체 로 시작하자!
+
+3. service의 url / admin의 url
+- 기본적으로 restful url은 자원의 이름으로만 표시한다.
+- admin : 진짜 특정한 기능을 위해 만드는 느낌이므로, 행위까지 들어가기도 한다
+- service-api : 범용적으로 사용되는 느낌이므로, 웬만하면 자원의 이름으로만 적는다
+
+<Repository>
+- repository 부분에서 NPE 뜨는 것 방지하기 위해 Optional로 가져오자!!!
+- 에러 처리는 서비스로 가져오기(?)
+
+<QueryDSL>
+- QuerydslRepositorySupport extends 하기
+- StringUtils.isNotBlank, isBlank 사용 (hasText 아님!)
+
+
+<Validator>
+- validator 하나하나 다 만드는 것도 힘든 일이다.. 자주 사용되는거 아니면 그냥 컨트롤러에서 처리하자
+    - (@IsDeletedConstraint는 연습용으로 남겨두기. 원래 regex로 해버림. @Pattern으로!)
+
+- regex 처리 : @pattern
+- 날짜도 사실 string으로 받고 pattern으로 validation check 해도 된다
+
+- 날짜 validation
+    1. @RequestParam의 날짜 : @DateTimeFormat
+    2. @RequestBody의 날짜 : JacksonConfig에서 deserializer 만들기
+
+<error, exception, exception handling>
+- argsEx : 값 자체가 이상한 형태로 들어올 때
+- stateEx : db 뒤져보니까 상태가 이상한데?
+    - 참고 : 런타임 ex 안던짐
+
+- argsEx, stateEx의 메세지로 ErrorCode를 담아 보내는 것이다!
+
+[완료된 요청인 경우 exception을 던질 필요가 있나? - 중복 요청인 경우]
+- 요청이 들어왔는데 이미 완료된 요청인 경우에 익셉션을 던질 필요가 있는가?에 대해 생각해보자. 이런 경우 많음
+
+
+[exception handling]
+1. Enum errorCode 만들기
+- 여기에 status, code, message로 묶어서 에러 메세지 관리한다
+    - status : http 상태코드
+    - code : 내가 직접 정의한 이름으로 짓는 것 (예시:common-01, account-01 ..)
+    - message : 해당 에러에 대한 설명
+
+- exception handling시에
+    1. response.data에 message넣기
+    2. response.code에 errorCode넣기
+    정도만 하면 된다.
+
+    errorcode에 정의한 부분만 넘기고, 자세한 사항은 로그로 남기면 된다.
+    그냥 log.error(ex = {}, ex) 하면 에러 관련 사항 쭉 나오니까, 여기서 내가 취하고 싶은 부분만 취하면 된다.
+
+
+- 자잘한 exception은, 아예 제일 큰 익셉션에서 잡아서 퉁치는 느낌
+
+
+- error message는 파일을 따로 만들어서 관리한다!
+
+
+

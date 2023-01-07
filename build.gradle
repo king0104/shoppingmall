@@ -52,7 +52,6 @@ subprojects {
 
         // test 관련
         // mapstruct
-//        testImplementation 'org.mapstruct:mapstruct:$1.5.3.Final'
         testAnnotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -65,38 +64,6 @@ subprojects {
     }
 }
 
-project(':model') {
-    // 공통 코드
-    bootJar { enabled = false } // core 은 bootJar 로 패키징 할 필요 없음
-    jar { enabled = true }
-
-    dependencies {
-        api 'org.springframework.boot:spring-boot-starter-data-jpa'
-        runtimeOnly 'com.mysql:mysql-connector-j' // runtimeOnly는 api 옵션 없음. 그래도, 다른 모듈에서 dependency로 가지고 있음
-
-
-    }
-}
-
-project(':admin') {
-    bootJar { enabled = true } // main이 필요한 모듈에 대해서만 bootJar 사용
-    jar { enabled = false }
-
-    dependencies {
-        implementation project(':model')
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-    }
-}
-
-project(':service-api') {
-    bootJar { enabled = true } // main이 필요한 모듈에 대해서만 bootJar 사용
-    jar { enabled = false }
-
-    dependencies {
-        implementation project(':model')
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-    }
-}
 
 
 
