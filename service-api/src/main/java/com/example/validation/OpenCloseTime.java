@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface OpenCloseTime {
-    String message() default "open time은 close time 이전이여야 합니다";
+    String message() default "open time은 close time 이전이여야 합니다.";
     String openTime();
     String closeTime();
 
