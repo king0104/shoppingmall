@@ -64,21 +64,6 @@ public class StoreRegistrationService {
         storeRegistration.setRejectReason(storeRegistrationUpdateDto.getRejectType());
         storeRegistration.setRejectType(storeRegistrationUpdateDto.getRejectReason());
 
-        // 이미 승인된 storeRegistration을 거절하는 경우는, 이미 승인된 store를 삭제해야한다
-        if (APPROVED.equals(storeRegistration.getStatus())) {
-            // 1. 승인된 store 찾기
-            Store store = storeRepository.findByStoreRegistrationNo(storeRegistrationNo)
-                    .orElseThrow(() -> {
-                        log.error("storeRegistrationNo : {} / 존재하지 않는 store 입니다.", storeRegistrationNo);
-                        return new NotFoundStoreException(ErrorCode.STORE_NOT_FOUND);
-                    });
-            // 2. isDeleted = "Y"로 변경하기
-            store.setIsDeleted("Y");
-            // 3. 변경한 store 저장하기
-            storeRepository.save(store);
-        }
-
-        // 일반적인 거절
         return storeRegistrationRepository.save(storeRegistration).getStoreRegistrationNo();
     }
 

@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
@@ -35,6 +36,7 @@ public class SecurityConfig {
                         .anyRequest().hasRole("USER") // 그외 나머지 요청은 모두 인증된 회원만 접근 가능
                 .and()
                     .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // jwt token 필터를 id/password 인증 필터 전에 넣는다
+
 
         return http.build();
     }
@@ -66,5 +68,7 @@ public class SecurityConfig {
         return (web) -> web.ignoring().antMatchers("/favicon.ico"
                 ,"/error","/swagger-ui/**","/swagger-resources/**","/v3/api-docs/**","/swagger-config/**");
     }
+
+
 
 }

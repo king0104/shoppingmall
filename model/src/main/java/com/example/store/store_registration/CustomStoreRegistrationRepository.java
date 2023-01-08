@@ -5,4 +5,5 @@ import java.util.List;
 
 public interface CustomStoreRegistrationRepository {
     List<StoreRegistration> findAll(Integer offset, Integer limit, LocalDateTime startTime, LocalDateTime lastTime, String isDeleted);
+    boolean existsBySellerNo(Long sellerNo);
 }

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 // querydslsupport
 // QuerydslRepositorySupport
@@ -40,6 +41,14 @@ public class CustomStoreRegistrationRepositoryImpl extends QuerydslRepositorySup
             return storeRegistration.isDeleted.eq(NOT_DELETE);
         }
         return null;
+    }
+
+    public boolean existsBySellerNo(Long sellerNo) {
+        StoreRegistration storeRegistrationEntity = from(storeRegistration)
+                .where(storeRegistration.seller.sellerNo.eq(sellerNo))
+                .fetchFirst();// == limit(1).fetchOne() : 결과 없으면 null 반환
+
+        return storeRegistrationEntity != null;
     }
 
 }

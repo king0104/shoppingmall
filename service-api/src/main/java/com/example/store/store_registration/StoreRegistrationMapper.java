@@ -1,6 +1,7 @@
 package com.example.store.store_registration;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 
@@ -12,6 +13,8 @@ public interface StoreRegistrationMapper {
     // mapping 어노테이션은 변환되는 클래스 기준임.
     // ex) StoreRegistration.setter(...) 이런식
     StoreRegistrationSaveDto toStoreRegistrationSaveDto(StoreRegistrationSaveRequest request);
+    @Mapping(source = "sellerNo", target = "seller") // 이걸 어떻게 해야하지..?
+    // mapstruct & 컬럼을 엔티티로 바꾸는걸 어떻게함?
     StoreRegistration toStoreRegistration(StoreRegistrationSaveDto storeRegistrationSaveDto);
 
 }
