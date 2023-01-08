@@ -1,5 +1,7 @@
 package com.example.store;
 
+import com.example.seller.Seller;
+import com.example.store.store_registration.StoreRegistration;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -20,8 +22,10 @@ public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long storeNo;
-    private Long storeRegistrationNo;
-    private Long sellerNo;
+    @OneToOne
+    private StoreRegistration storeRegistration;
+    @OneToOne
+    private Seller seller;
     private String introduction;
     private String name;
     private LocalTime openTime; // 날짜 없는 시각은 localtime 사용

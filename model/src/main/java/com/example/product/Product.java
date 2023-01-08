@@ -1,5 +1,7 @@
 package com.example.product;
 
+import com.example.category.Category;
+import com.example.store.Store;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,8 +23,12 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productNo;
-    private Long categoryNo;
-    private Long storeNo;
+    @ManyToOne
+    @JoinColumn(name = "category_no")
+    private Category category;
+    @ManyToOne
+    @JoinColumn(name = "store_no")
+    private Store store;
     private String title;
     private int price;
     private int deliveryFee;

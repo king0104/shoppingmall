@@ -1,5 +1,7 @@
 package com.example.product.product_tag_map;
 
+import com.example.product.Product;
+import com.example.product.tag.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,8 +23,12 @@ public class ProductTag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productTagNo;
-    private Long productNo;
-    private Long tagNo;
+    @ManyToOne
+    @JoinColumn(name = "product_no")
+    private Product product;
+    @ManyToOne
+    @JoinColumn(name = "tag_no")
+    private Tag tag;
 
     @CreatedDate
     private LocalDateTime createdAt;

@@ -21,7 +21,9 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryNo;
-    private Long parentNo;
+    @ManyToOne
+    @JoinColumn(name = "parent_no")
+    private Category parentCategory;
     private String name;
     private int depth;
 
