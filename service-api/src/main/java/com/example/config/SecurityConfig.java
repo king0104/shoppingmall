@@ -1,5 +1,7 @@
 package com.example.config;
 
+import com.example.security.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -7,31 +9,32 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
 
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
         http
-                .cors().and() //  CorsFilter 활성화
-                .csrf().disable() // 세션을 사용하지 않고 JWT 토큰을 활용하여 진행하고 REST API를 만드는 작업이기때문에 csrf 사용은 disable 처리합니다.
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 현재 스프링 시큐리티에서 세션을 관리하지 않겠다는 뜻(클라이언트에서 요청하는 헤더에 token을 담아보내고, 서버에서 토큰을 확인하여 인증하는 방식을 사용할 것이기 때문)
+                .httpBasic().disable() // rest api 이므로 기본설정 사용안함. 기본설정은 비인증시 로그인폼 화면으로 리다이렉트 된다.
+                .csrf().disable() // rest api이므로 csrf 보안이 필요없으므로 disable처리.
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt token으로 인증하므로 세션은 필요없으므로 생성안함.
                 .and()
-                .authorizeRequests() // [인증]
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                //                    .antMatchers("/api/v1/test/permit-all").permitAll()
-                //                    .antMatchers("/api/v1/test/auth").authenticated()
-                .antMatchers("/**").authenticated() // 인증 완료되어야 해당 api 사용 가능. 미인증시 403 forbidden
-                .anyRequest().permitAll()
+                    .authorizeRequests() // 다음 리퀘스트에 대한 사용권한 체크
+                        .antMatchers("/signin", "/signup").permitAll() // 가입 및 인증 주소는 누구나 접근가능
+                        .antMatchers(HttpMethod.GET, "hello/**").permitAll() // hellowworld로 시작하는 GET요청 리소스는 누구나 접근가능
+                        .anyRequest().hasRole("USER") // 그외 나머지 요청은 모두 인증된 회원만 접근 가능
                 .and()
-                .formLogin().disable()
-        ;
+                    .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // jwt token 필터를 id/password 인증 필터 전에 넣는다
 
         return http.build();
     }
@@ -57,4 +60,11 @@ public class SecurityConfig {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         return authenticationManagerBuilder.build();
     }
+
+    @Bean // ignore check swagger resource
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().antMatchers("/favicon.ico"
+                ,"/error","/swagger-ui/**","/swagger-resources/**","/v3/api-docs/**","/swagger-config/**");
+    }
+
 }

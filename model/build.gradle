@@ -7,9 +7,11 @@ plugins {
     runtimeOnly 'com.mysql:mysql-connector-j'
     implementation 'com.querydsl:querydsl-jpa:5.0.0'
     implementation 'com.querydsl:querydsl-apt:5.0.0'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
 
-}
+
+ }
 
 def querydslDir = "$buildDir/generated/querydsl"
 // JPA 사용 여부와 사용할 경로를 설정
