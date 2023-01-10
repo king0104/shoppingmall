@@ -31,7 +31,8 @@ public class HelloController {
 
     @GetMapping("/token-test")
     public void tokenTest(HttpServletRequest request) {
-        String token = jwtUtil.resolveToken((HttpServletRequest) request);
+        String token = jwtUtil.resolveToken(request);
+
         Long sellerNo = Long.valueOf(jwtUtil.getUserPk(token));
         log.info("sellerNo = {}", sellerNo);
 

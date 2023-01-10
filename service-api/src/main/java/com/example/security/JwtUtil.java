@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class JwtUtil { // JWT 토큰을 생성 및 검증 모듈
@@ -64,13 +66,24 @@ public class JwtUtil { // JWT 토큰을 생성 및 검증 모듈
 
     // Request의 Header에서 token 파싱 : "X-AUTH-TOKEN: jwt토큰"
     public String resolveToken(HttpServletRequest req) {
-        return req.getHeader("X-AUTH-TOKEN");
+        return req.getHeader("Authorization").substring("Bearer ".length());
+    }
+
+    // Request의 Header에서 token 파싱 : "X-AUTH-TOKEN: jwt토큰"
+    public String resolveTokenWithBearer(HttpServletRequest req) {
+        return req.getHeader("Authorization");
     }
 
     // Jwt 토큰의 유효성 + 만료일자 확인
-    public boolean validateToken(String jwtToken) {
+    public boolean validateTokenWithBearer(String tokenWithBearer) {
+        if (tokenWithBearer == null || !tokenWithBearer.startsWith("Bearer ")) {
+            return false;
+        }
+
+        String token = tokenWithBearer.substring("Bearer ".length());
+        log.info(token);
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
+            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
             return false;
