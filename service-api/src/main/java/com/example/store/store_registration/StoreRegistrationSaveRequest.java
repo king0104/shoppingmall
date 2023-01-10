@@ -1,10 +1,7 @@
 package com.example.store.store_registration;
 
 import com.example.validation.OpenCloseTime;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.*;
 import java.time.LocalTime;
@@ -14,13 +11,13 @@ import java.time.LocalTime;
         closeTime = "closeTime",
         message = "open시간이 close시간 이전이어야 합니다"
 )
+@Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class StoreRegistrationSaveRequest {
 
-    private Long sellerNo;
     @Size(min = 0, max = 1000) // string min,max 정하기
     private String introduction;
     @Size(min = 0, max = 30)

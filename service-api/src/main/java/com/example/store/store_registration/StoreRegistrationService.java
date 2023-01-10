@@ -26,6 +26,10 @@ public class StoreRegistrationService {
             throw new DuplicatedStoreRegistrationException(ErrorCode.MULTI_STORE_REGISTRATION);
 
         }
-        storeRegistrationRepository.save(StoreRegistrationMapper.INSTANCE.toStoreRegistration(storeRegistrationSaveDto));
+        // 1. seller 가져오기 (이 로직이 mapper 안에 들어가는게 낫나..?)
+        Seller seller = sellerRepository.findById(storeRegistrationSaveDto.getSellerNo())
+                .orElseThrow(() -> new NotFoundSellerException(ErrorCode.SELLER_NOT_FOUND));
+        // 2. storeRegistration 저장
+        storeRegistrationRepository.save(StoreRegistrationMapper.INSTANCE.toStoreRegistration(storeRegistrationSaveDto, seller));
     }
 }
