@@ -1,10 +1,8 @@
 package com.example.security;
 
 import com.example.ApiResponse;
-import com.example.seller.SellerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,14 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class SignController {
 
     private final SignService signService;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping(value = "/signin")
     public ApiResponse signin(@RequestParam String email, @RequestParam String password) {
 
         SigninDto signinDto = signService.signin(email, password);
-        String token = jwtTokenProvider.createToken(String.valueOf(signinDto.getSellerNo()), signinDto.getRoles());
+        String token = jwtUtil.createToken(String.valueOf(signinDto.getSellerNo()), signinDto.getRoles());
 
         return ApiResponse.builder()
                 .success(true)

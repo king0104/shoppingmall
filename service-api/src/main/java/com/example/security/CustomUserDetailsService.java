@@ -21,12 +21,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final SellerRepository sellerRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String sellerEmail) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String sellerNo) throws UsernameNotFoundException {
 
         System.out.println("인증을 받습니다.");
 
-        return sellerRepository.findSellerByEmail(sellerEmail)
-                .orElseThrow(() -> new UsernameNotFoundException("Not Registered Email : " + sellerEmail));
+        return sellerRepository.findById(Long.valueOf(sellerNo))
+                .orElseThrow(() -> new UsernameNotFoundException("Not Registered seller. sellerNo : " + sellerNo));
 
     }
 

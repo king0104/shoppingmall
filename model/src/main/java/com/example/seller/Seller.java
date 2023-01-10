@@ -46,10 +46,10 @@ public class Seller implements UserDetails {
     private String isDeleted = "N";
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "role",
-    joinColumns = @JoinColumn(name = "seller_no"))
+    @CollectionTable(name = "role", joinColumns = @JoinColumn(name = "seller_no"))
+    @Column(name = "name")
     @Builder.Default
-    private List<String> roles = new ArrayList<>();
+    List<String> roles = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

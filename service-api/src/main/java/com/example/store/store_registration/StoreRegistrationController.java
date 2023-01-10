@@ -16,6 +16,9 @@ public class StoreRegistrationController {
 
     private final StoreRegistrationService storeRegistrationService;
 
+    // 1. 토큰을 받는다
+    // 2. 토큰에서 sellerNo 추출한다
+    // 3. 그걸로 request만든다
     @PostMapping("/store/store-registration")
     public ApiResponse register(@Validated @RequestBody StoreRegistrationSaveRequest request) {
 

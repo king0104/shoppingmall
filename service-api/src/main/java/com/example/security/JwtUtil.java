@@ -22,7 +22,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class JwtTokenProvider { // JWT 토큰을 생성 및 검증 모듈
+public class JwtUtil { // JWT 토큰을 생성 및 검증 모듈
 
     @Value("spring.jwt.secret")
     private String secretKey;
@@ -57,6 +57,7 @@ public class JwtTokenProvider { // JWT 토큰을 생성 및 검증 모듈
     }
 
     // Jwt 토큰에서 회원 구별 정보 추출
+    // - 여기서는 seller의 pk (sellerNo)
     public String getUserPk(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }

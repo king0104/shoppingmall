@@ -19,7 +19,6 @@ public class SignService {
 
     private final SellerRepository sellerRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtTokenProvider jwtTokenProvider;
 
     public SigninDto signin(String email, String password) {
         Seller seller = sellerRepository.findSellerByEmail(email)
