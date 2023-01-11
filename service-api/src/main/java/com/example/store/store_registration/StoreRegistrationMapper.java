@@ -1,7 +1,6 @@
 package com.example.store.store_registration;
 
 import com.example.seller.Seller;
-import com.example.seller.SellerDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

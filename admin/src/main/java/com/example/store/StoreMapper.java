@@ -13,6 +13,7 @@ public interface StoreMapper {
 
     // request store 를 store로 바꾸기
     @Mapping(target = "status", constant = "close")
+//    @Mapping(source = "seller", ignore = true)
     Store toStore(StoreRegistration storeRegistration);
 
 }

@@ -30,7 +30,6 @@ public class StoreRegistrationService {
 
     @Transactional
     public List<StoreRegistrationDto> getRequestedStoreList(Integer offset, Integer limit, LocalDateTime firstTime, LocalDateTime lastTime, String isDeleted) {
-        // RequestedStore -> dto 변환
         return storeRegistrationRepository.findAll(offset,limit,firstTime,lastTime,isDeleted)
                 .stream()
                 .map(storeRequest -> StoreRegistrationMapper.INSTANCE.toDto(storeRequest))
@@ -44,13 +43,14 @@ public class StoreRegistrationService {
 
         checkIsDeleted(storeRegistration);
 
-        // 승인되지 않았을 경우에만, 승인 로직 타기
-        if (!APPROVED.equals(storeRegistration.getStatus())) {
-            storeRegistration.setStatus(APPROVED);
-            storeRegistrationRepository.save(storeRegistration);
-            storeRepository.save(StoreMapper.INSTANCE.toStore(storeRegistration));
+        // 이미 승인되었다면, 종료
+        if (APPROVED.equals(storeRegistration.getStatus())) {
+            return;
         }
-
+        // 승인 안 된 상태
+        storeRegistration.setStatus(APPROVED);
+        storeRegistrationRepository.save(storeRegistration);
+        storeRepository.save(StoreMapper.INSTANCE.toStore(storeRegistration));
     }
 
     // 2. 거절
@@ -70,7 +70,7 @@ public class StoreRegistrationService {
     private void checkIsDeleted(StoreRegistration storeRegistration) {
         if (DELETED.equals(storeRegistration.getIsDeleted())) {
             log.error("storeRegistrationNo : {} / 삭제된 storeRegistration 입니다.", storeRegistration.getStoreRegistrationNo());
-            throw new NotFoundStoreRegistrationException(ErrorCode.STORE_REGISTRATION_NOT_FOUND);
+            throw new NotFoundStoreRegistrationException("삭제된 storeRegistration 입니다.",ErrorCode.STORE_REGISTRATION_NOT_FOUND);
         }
     }
 
@@ -78,7 +78,7 @@ public class StoreRegistrationService {
         StoreRegistration storeRegistration = storeRegistrationRepository.findById(storeRegistrationNo)
                 .orElseThrow(() -> {
                             log.error("storeRegistrationNo : {} / 존재하지 않는 storeRegistration 입니다.", storeRegistrationNo);
-                            return new NotFoundStoreRegistrationException(ErrorCode.STORE_REGISTRATION_NOT_FOUND);
+                            return new NotFoundStoreRegistrationException("존재하지 않는 storeRegistration 입니다.",ErrorCode.STORE_REGISTRATION_NOT_FOUND);
                         });
 
         return storeRegistration;

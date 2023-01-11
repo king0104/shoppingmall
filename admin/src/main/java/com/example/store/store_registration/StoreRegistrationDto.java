@@ -1,5 +1,6 @@
 package com.example.store.store_registration;
 
+import com.example.seller.Seller;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import java.time.LocalTime;
 @Builder
 public class StoreRegistrationDto {
     private Long storeRegistrationNo;
-    private Long sellerNo;
+    private Seller seller;
     private String introduction;
     private String name;
     private LocalTime openTime; // 날짜 없는 시각은 localtime 사용

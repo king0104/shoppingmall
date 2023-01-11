@@ -23,8 +23,7 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long storeNo;
     @OneToOne
-    private StoreRegistration storeRegistration;
-    @OneToOne
+    @JoinColumn(name = "seller_no")
     private Seller seller;
     private String introduction;
     private String name;

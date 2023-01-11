@@ -45,12 +45,15 @@ public class Seller implements UserDetails {
     @Builder.Default
     private String isDeleted = "N";
 
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "role", joinColumns = @JoinColumn(name = "seller_no"))
     @Column(name = "name")
     @Builder.Default
     List<String> roles = new ArrayList<>();
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream().map(SimpleGrantedAuthority::new).collect(toList());
@@ -60,6 +63,7 @@ public class Seller implements UserDetails {
     public String getPassword() {
         return this.password;
     }
+
     @Override
     public String getUsername() {
         return this.email;

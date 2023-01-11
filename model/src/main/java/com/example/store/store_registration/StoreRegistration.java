@@ -21,9 +21,11 @@ public class StoreRegistration {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long storeRegistrationNo;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_no")
     private Seller seller;
+
     private String introduction;
     private String name;
     private LocalTime openTime; // 날짜 없는 시각은 localtime 사용

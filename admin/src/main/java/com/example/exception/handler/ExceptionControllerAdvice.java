@@ -3,6 +3,7 @@ package com.example.exception.handler;
 import com.example.ApiResponse;
 import com.example.ValidationErrorData;
 import com.example.common.ErrorCode;
+import com.example.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,6 +18,18 @@ import javax.validation.ConstraintViolationException;
 @Slf4j
 @RestControllerAdvice
 public class ExceptionControllerAdvice {
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ApiResponse handleCustomException(CustomException ex) {
+        log.error("exception = {}, {}", ex.getMessage(), ex.getClass());
+
+        return ApiResponse.builder()
+                .success(false)
+                .data(ex.getMessage())
+                .errorCode(ex.getErrorCode().getCode())
+                .build();
+    }
 
     // validation annotation 조건에 걸렸을 경우 발생하는 exception
     @ResponseStatus(HttpStatus.BAD_REQUEST)

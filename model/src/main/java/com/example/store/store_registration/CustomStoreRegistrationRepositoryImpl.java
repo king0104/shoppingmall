@@ -1,5 +1,6 @@
 package com.example.store.store_registration;
 
+import com.example.seller.QSeller;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -16,15 +17,16 @@ public class CustomStoreRegistrationRepositoryImpl extends QuerydslRepositorySup
     private static final String DELETE = "Y";
     private static final String NOT_DELETE = "N";
     QStoreRegistration storeRegistration = QStoreRegistration.storeRegistration;
+    QSeller seller = QSeller.seller;
 
     public CustomStoreRegistrationRepositoryImpl() {
         super(StoreRegistration.class);
     }
 
-    // -- 조회조건으로 클래스 만들기(많아지면)
     @Override
     public List<StoreRegistration> findAll(Integer offset, Integer limit, LocalDateTime firstTime, LocalDateTime lastTime, String isDeleted) {
         return from(storeRegistration)
+                .join(storeRegistration.seller, seller).fetchJoin() // LAZY 로딩 & fetch join
                 .where(
                         storeRegistration.createdAt.between(firstTime, lastTime)
                             .and(isDeletedEq(isDeleted))
